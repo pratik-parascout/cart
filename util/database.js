@@ -1,27 +1,14 @@
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
+const mongoose = require('mongoose');
 
-let _db;
-
-const mongoConnect = (callback) => {
-  MongoClient.connect('uri')
-    .then((client) => {
-      console.log('Connected!');
-      _db = client.db();
-      callback();
+const connectToDatabase = () => {
+  return mongoose.connect('mongodb://localhost:27017/shop')
+    .then(() => {
+      console.log('Connected to MongoDB with Mongoose!');
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(err => {
+      console.log('Connection failed!', err);
       throw err;
     });
 };
 
-const getDb = () => {
-  if (_db) {
-    return _db;
-  }
-  throw 'No database found!';
-};
-
-exports.mongoConnect = mongoConnect;
-exports.getDb = getDb;
+module.exports = connectToDatabase;
